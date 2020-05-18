@@ -4,7 +4,7 @@
 #include <sstream>
 
 
-rawObj::rawObj(const std::string paramsAsStr)
+rawObj::rawObj(const std::string& paramsAsStr)
 {
 	std::stringstream paramStrStream(paramsAsStr);
 	std::string buf;

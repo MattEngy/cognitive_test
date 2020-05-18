@@ -1,5 +1,4 @@
 #include <list>
-#define _USE_MATH_DEFINES
 #include <cmath>
 
 #include "stdafx.h"
@@ -8,7 +7,7 @@
 
 #define sqr(a) ((a)*(a))
 
-uniqueObj::uniqueObj(const uint32_t newId, const rawObj initialPoint)
+uniqueObj::uniqueObj(const uint32_t newId, const rawObj& initialPoint)
 {
 	id = newId;
 	type = initialPoint.type;
@@ -54,7 +53,7 @@ uniqueObj::~uniqueObj()
 	}
 }*/
 
-bool uniqueObj::checkPointMatch(const rawObj newPoint, const float timeElapsed, float* error) const {
+bool uniqueObj::checkPointMatch(const rawObj& newPoint, const float timeElapsed, float* error) const {
 	Eigen::Vector2f predictedPos;
 	//	Eigen::Vector2f velocityCur;
     LPFVec2df velocityLPFbuf = velocityLPF;
@@ -84,7 +83,7 @@ bool uniqueObj::checkPointMatch(const rawObj newPoint, const float timeElapsed, 
 	}
 }
 
-void uniqueObj::addPoint(const rawObj newPoint, const float timeElapsed) {
+void uniqueObj::addPoint(const rawObj& newPoint, const float timeElapsed) {
     Eigen::Vector2f curVelocity = (newPoint.pos - track.back().pos) / timeElapsed;
     Eigen::Vector2f curAcc = (curVelocity - track.back().velocity) / timeElapsed;
     velocityLPF.next(curVelocity, timeElapsed);
@@ -117,6 +116,3 @@ void uniqueObj::addPoint(const rawObj newPoint, const float timeElapsed) {
     trackPoint buf(newPoint.pos, velocityLPF.curVal, accLPF.curVal, courseBuf, newPoint.timestamp);
     track.push_back(buf);
 }
-
-#undef sqr
-#undef USE_MATH_DEFINES

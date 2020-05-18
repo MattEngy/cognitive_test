@@ -18,7 +18,7 @@ public:
 
     const bool operator==(const rawObj a);
 
-	rawObj(std::string paramsAsStr);
+	rawObj(const std::string& paramsAsStr);
 	rawObj() {};
 	~rawObj();
 
