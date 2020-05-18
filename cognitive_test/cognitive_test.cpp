@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <list>
+#include <memory>
 
 #include "params.h"
 #include "uniqueObjDB.h"
@@ -15,7 +16,7 @@ using namespace std;
 using namespace Eigen;
 
 void filterSimilarDetections(list<rawObj>& detectionsList);
-rawObj* formArray(list<rawObj>& detectionsList);
+unique_ptr<rawObj[]> formArray(list<rawObj>& detectionsList);
 
 int main() {
 	ifstream fileInp;
@@ -52,14 +53,14 @@ int main() {
             //NOTE: this function uses ID field of objects in curRawDetections
             //to store correspinding array index (for optimization props)
             unsigned int curRawDetectionsCnt = curRawDetections.size();
-            rawObj* curObjArrayBuf = formArray(curRawDetections);
+            unique_ptr<rawObj []> curObjArrayBuf = formArray(curRawDetections);
 			//process tick
 			if (curRawDetections.size() >= 2) {
 				filterSimilarDetections(curRawDetections);
 			}
             for (uniqueObjIt = uniqueObjects.begin(); uniqueObjIt != uniqueObjects.end(); uniqueObjIt++) {
                 float timeElapsed = (curTimestamp - uniqueObjIt->track.back().timestamp) * MSEC_TO_SEC;
-				float minError = MERGE_THRESHOLD * 100;
+				float minError = MERGE_THRESHOLD * 1000;
 				list<rawObj>::iterator minErrorObj;
 				bool matchFound = false;
                 for (curRawDetectionsIt = curRawDetections.begin(); curRawDetectionsIt != curRawDetections.end(); curRawDetectionsIt++) {
@@ -97,7 +98,7 @@ int main() {
 //            delete curObjArrayBuf;
 		}
 	}
-    uniqueObjects.remove_if([](uniqueObj u) { return u.track.size() < (2 / 0.03); });
+    uniqueObjects.remove_if([](const uniqueObj & u) { return u.track.size() < (2 / 0.03); });
     list<rawObj>::iterator outFileBufIt;
     // setting id of record to -1 if this id isnt present in uniqueObjects after filtering;
     // migh be better to switch to maps
@@ -147,8 +148,8 @@ void filterSimilarDetections(list<rawObj>& detectionsList) {
 	detectionsList.pop_back();
 }
 
-rawObj* formArray(list<rawObj>& detectionsList) {
-    rawObj* ptrBuf = new rawObj[detectionsList.size()];
+unique_ptr<rawObj []> formArray(list<rawObj>& detectionsList) {
+    unique_ptr<rawObj []> ptrBuf(new rawObj[detectionsList.size()]);
     list<rawObj>::iterator it = detectionsList.begin();
     for (unsigned int i = 0; i < detectionsList.size(); ++i) {
         ptrBuf[i] = *it;
