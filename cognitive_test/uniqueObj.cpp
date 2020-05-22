@@ -58,8 +58,9 @@ bool uniqueObj::checkPointMatch(const rawObj& newPoint, const float timeElapsed,
 	//	Eigen::Vector2f velocityCur;
     LPFVec2df velocityLPFbuf = velocityLPF;
     LPFVec2df accLPFbuf = accLPF;
-	float megreThresholdBuf;
-	if (track.size() >= 2) {
+    bool objIsRaw = track.size() >= 2;
+    float megreThresholdBuf = trackObjType::getThreshold(newPoint.type, objIsRaw);
+	if (objIsRaw) {
         //velocityLPFbuf.next((track.back().pos - prev(track.end(), 2)->pos) / timeElapsed, timeElapsed);
         //accLPFbuf.next((track.back().velocity - prev(track.end(), 2)->velocity) / timeElapsed, timeElapsed);
 		//		Eigen::Vector2f accCur = (velocityCur.curVal - velocityPrev) / timeElapsed;
@@ -67,11 +68,9 @@ bool uniqueObj::checkPointMatch(const rawObj& newPoint, const float timeElapsed,
         predictedPos = track.back().pos +
             velocityLPF.curVal * (timeElapsed) +
             accLPFbuf.curVal * 0.5f * sqr(timeElapsed);
-		megreThresholdBuf = MERGE_THRESHOLD;
 	}
 	else {
 		predictedPos = track.back().pos;
-		megreThresholdBuf = MERGE_THRESHOLD_RAW;
 	}
 	float predictionError = (predictedPos - newPoint.pos).norm();
     *error = predictionError;

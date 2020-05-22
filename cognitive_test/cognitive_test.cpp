@@ -10,7 +10,6 @@
 
 #include "params.h"
 #include "uniqueObjDB.h"
-#include "Eigen-3.3.7/Eigen/Dense"
 
 using namespace std;
 using namespace Eigen;
@@ -60,14 +59,14 @@ int main() {
 			}
             for (uniqueObjIt = uniqueObjects.begin(); uniqueObjIt != uniqueObjects.end(); uniqueObjIt++) {
                 float timeElapsed = (curTimestamp - uniqueObjIt->track.back().timestamp) * MSEC_TO_SEC;
-				float minError = MERGE_THRESHOLD * 1000;
+				float minError = 1000;//much more than reasonable real error
 				list<rawObj>::iterator minErrorObj;
 				bool matchFound = false;
                 for (curRawDetectionsIt = curRawDetections.begin(); curRawDetectionsIt != curRawDetections.end(); curRawDetectionsIt++) {
 					float curError;
 					bool pointMatches = uniqueObjIt->checkPointMatch(*curRawDetectionsIt, timeElapsed, &curError);
 					matchFound |= pointMatches;
-					if (pointMatches && (curError < minError)) {
+					if (pointMatches && (curError < minError) && (timeElapsed < OBJECT_MISSED_SEC_MAX)) {
 						minErrorObj = curRawDetectionsIt;
 						minError = curError;
 					}

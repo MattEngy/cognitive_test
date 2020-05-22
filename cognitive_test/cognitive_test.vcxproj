@@ -141,6 +141,19 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="cognitive_test.cpp" />
+    <ClCompile Include="LPFf.cpp" />
+    <ClCompile Include="LPFVec2df.cpp" />
+    <ClCompile Include="rawObj.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="trackPoint.cpp" />
+    <ClCompile Include="uniqueObj.cpp" />
+    <ClCompile Include="uniqueObjDB.cpp" />
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="LPFf.h" />
     <ClInclude Include="LPFVec2df.h" />
     <ClInclude Include="params.h" />
@@ -149,21 +162,10 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="trackPoint.h" />
     <ClInclude Include="uniqueObj.h" />
+    <ClInclude Include="uniqueObjDB.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cognitive_test.cpp" />
-    <ClCompile Include="LPFf.cpp" />
-    <ClCompile Include="LPFVec2df.cpp" />
-    <ClCompile Include="params.cpp" />
-    <ClCompile Include="rawObj.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="trackPoint.cpp" />
-    <ClCompile Include="uniqueObj.cpp" />
+    <None Include="Python_plot\pyplot.py" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
